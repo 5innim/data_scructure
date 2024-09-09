@@ -514,3 +514,6 @@ private void add(E e, Object[] elementData, int s) {
     size = s + 1;
 }
 ```
+
+### Vector
+Vector는 ArrayList와 마찬가지로 동적 배열을 제공하는 클래스이다. 기본적으로 비슷한 기능을 제공하지만 Vector는 연산 메서드에 synchronized 키워드를 사용함으로써 멀티스레드 환경에서 동기화를 제공한다. 또한 elementData 배열의 capacity가 ArrayList에서는 데이터가 다 차면 1.5배씩 증가한 반면 Vector에서는 2배씩 증가한다는 점에서 차이가 난다.
