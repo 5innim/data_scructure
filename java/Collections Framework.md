@@ -702,3 +702,8 @@ public abstract class AbstractQueue<E>
 
 }
 ```
+
+### PriorityQueue
+PriorityQueue는 내부적으로 동적배열 역할을 하는 queue 멤버필드와 siftUp(int k, E x), siftDown(int k, E x) 메서드를 구현하여 heap 자료구조를 지원하는 클래스이다. 
+또한, 요소들간 비교를 위해 comparator 멤버필드를 가지며 comparator가 초기화되지 않은 경우, 비교 대상이 되는 Element는 Comparlabe을 구현하여야한다.
+
