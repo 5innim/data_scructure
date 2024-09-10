@@ -576,20 +576,129 @@ public class Stack<E> extends Vector<E> {
 
 ## Queue
 Queue 인터페이스는 add(E e), offer(E e), remove(), poll(), element(), peek() 함수를 정의한다. 
-여기서 add, remove, element
+여기서 add(E e), remove(), element() 함수는 queue가 비거나 다 찼을 경우, 예외를 발생시킨다. 이에 대응하는 offer(E e), poll(), peek() 함수는 false 또는 null을 반환한다. 
 ```java
 public interface Queue<E> extends Collection<E> {
+    // Returns: true (as specified by Collection.add)
+    // IllegalStateException if no space is currently available.
     boolean add(E e);
 
+    // Returns: true if the element was added to this queue, else false
     boolean offer(E e);
 
+    // it throws an exception if this queue is empty.
+    // Returns: the head of this queue
     E remove();
 
+    // Returns: the head of this queue, or null if this queue is empty
     E poll();
 
+    // throws an exception if this queue is empty.
+    // Returns: the head of this queue
     E element();
 
+    // Returns: the head of this queue, or null if this queue is empty
     E peek();
 }
 ```
+<br/>
 
+### Deque
+Deque는 양방향 삽입 삭제가 가능한 자료구조 deque의 기능을 정의한다. 
+```java
+public interface Deque<E> extends Queue<E> {
+
+    void addFirst(E e);
+    void addLast(E e);
+    boolean offerFirst(E e);
+    boolean offerLast(E e);
+    E removeFirst();
+    E removeLast();
+    E pollFirst();
+    E pollLast();
+    E getFirst();
+    E getLast();
+    E peekFirst();
+    E peekLast();
+    boolean removeFirstOccurrence(Object o);
+    boolean removeLastOccurrence(Object o);
+
+    // *** Queue methods ***
+
+    boolean add(E e);
+    boolean offer(E e);
+    E remove();
+    E poll();
+    E element();
+    E peek();
+    boolean addAll(Collection<? extends E> c);
+
+    // *** Stack methods ***
+    void push(E e);
+    E pop();
+
+    // *** Collection methods ***
+
+    boolean remove(Object o);
+    boolean contains(Object o);
+    int size();
+    Iterator<E> iterator();
+    Iterator<E> descendingIterator();
+
+}
+```
+
+<br/>
+
+### AbstractQueue
+AbstractQueue는 Queue 인터페이스의 일부 메서드를 구현한다. add(E e), remove(), element() 메서드 내에서 각각 offer(E e), poll(), peek() 메서드를 사용하며 반환값에 따라 예외를 발생시키는 것을 볼 수 있다. 
+```java
+public abstract class AbstractQueue<E>
+    extends AbstractCollection<E>
+    implements Queue<E> {
+
+    protected AbstractQueue() {
+    }
+
+    public boolean add(E e) {
+        if (offer(e))
+            return true;
+        else
+            throw new IllegalStateException("Queue full");
+    }
+
+    public E remove() {
+        E x = poll();
+        if (x != null)
+            return x;
+        else
+            throw new NoSuchElementException();
+    }
+
+    public E element() {
+        E x = peek();
+        if (x != null)
+            return x;
+        else
+            throw new NoSuchElementException();
+    }
+
+    public void clear() {
+        while (poll() != null)
+            ;
+    }
+
+    public boolean addAll(Collection<? extends E> c) {
+        if (c == null)
+            throw new NullPointerException();
+        if (c == this)
+            throw new IllegalArgumentException();
+        boolean modified = false;
+        for (E e : c)
+            if (add(e))
+                modified = true;
+        return modified;
+    }
+
+}
+```
