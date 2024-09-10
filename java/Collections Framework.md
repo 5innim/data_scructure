@@ -702,6 +702,7 @@ public abstract class AbstractQueue<E>
 
 }
 ```
+<br/>
 
 ### PriorityQueue
 PriorityQueue는 내부적으로 동적배열 역할을 하는 queue 멤버필드와 siftUp(int k, E x), siftDown(int k, E x) 메서드를 구현하여 heap 자료구조를 지원하는 클래스이다. 
