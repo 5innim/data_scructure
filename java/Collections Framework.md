@@ -570,3 +570,26 @@ public class Stack<E> extends Vector<E> {
     private static final long serialVersionUID = 1224463164541339165L;
 }
 ```
+
+<br/>
+<br/>
+
+## Queue
+Queue 인터페이스는 add(E e), offer(E e), remove(), poll(), element(), peek() 함수를 정의한다. 
+여기서 add, remove, element
+```java
+public interface Queue<E> extends Collection<E> {
+    boolean add(E e);
+
+    boolean offer(E e);
+
+    E remove();
+
+    E poll();
+
+    E element();
+
+    E peek();
+}
+```
+
