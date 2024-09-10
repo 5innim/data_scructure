@@ -517,3 +517,56 @@ private void add(E e, Object[] elementData, int s) {
 
 ### Vector
 Vector는 ArrayList와 마찬가지로 동적 배열을 제공하는 클래스이다. 기본적으로 비슷한 기능을 제공하지만 Vector는 연산 메서드에 synchronized 키워드를 사용함으로써 멀티스레드 환경에서 동기화를 제공한다. 또한 elementData 배열의 capacity가 ArrayList에서는 데이터가 다 차면 1.5배씩 증가한 반면 Vector에서는 2배씩 증가한다는 점에서 차이가 난다.
+
+<br/>
+
+### Stack
+Stack은 Vector 클래스를 상속하면서 stack 자료구조의 기본연산인 push, pop, peek을 구현한다. 구현한 연산들은 부모 클래스인 Vector 클래스의 함수를 사용하게 되므로, 멀티스레드 환경에서 동기화를 제공한다.
+
+```java
+public class Stack<E> extends Vector<E> {
+
+    public Stack() {
+    }
+
+    public E push(E item) {
+        addElement(item);
+
+        return item;
+    }
+
+    public synchronized E pop() {
+        E       obj;
+        int     len = size();
+
+        obj = peek();
+        removeElementAt(len - 1);
+
+        return obj;
+    }
+
+    public synchronized E peek() {
+        int     len = size();
+
+        if (len == 0)
+            throw new EmptyStackException();
+        return elementAt(len - 1);
+    }
+
+    public boolean empty() {
+        return size() == 0;
+    }
+
+    public synchronized int search(Object o) {
+        int i = lastIndexOf(o);
+
+        if (i >= 0) {
+            return size() - i;
+        }
+        return -1;
+    }
+
+    @java.io.Serial
+    private static final long serialVersionUID = 1224463164541339165L;
+}
+```
