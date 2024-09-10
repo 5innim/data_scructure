@@ -647,6 +647,29 @@ public interface Deque<E> extends Queue<E> {
 
 }
 ```
+<br/>
+
+### ArrayDeque
+ArrayDeque는 동적배열을 사용하여 Deque를 구현하는 클래스이다. ArrayDeque가 스택으로 사용할 때 Stack 클래스보다 더 빠르고, 큐로 사용할 때 LinkedList보다 더 빠를 수 있다.
+
+**1. Stack 클래스와의 비교**
+- Stack 클래스는 **동기화(synchronization)**가 포함된 자료 구조다. 반면, ArrayDeque는 동기화를 지원하지 않으므로 스택처럼 사용할 때 동기화에 따른 성능 저하가 발생하지 않아 더 빠르게 동작할 수 있다.
+
+<pre>
+Stack: 동기화로 인해 성능이 느려질 수 있음.
+ArrayDeque: 동기화가 없기 때문에 빠른 연산 가능.
+</pre>
+
+<br/>
+
+**2. LinkedList와의 비교**
+- LinkedList는 이중 연결 리스트(doubly linked list)로 구현되어 있다. 이 때문에 요소를 큐의 앞이나 뒤에 삽입하거나 제거하는 연산은 O(1) 시간 복잡도를 갖지만, 메모리 관점에서 비효율적일 수 있다. 각각의 요소는 데이터와 함께 포인터를 포함해야 하므로 추가적인 메모리 사용이 필요하며, 연결 리스트에서 요소에 접근할 때는 노드를 순차적으로 따라가야 O(n) 시간 복잡도를 가진다.
+- ArrayDeque는 내부적으로 배열을 사용하, 배열은 메모리 상에 연속적으로 저장되므로 캐시 적중률(cache hit rate)이 높다. 요소를 배열의 앞뒤에 삽입하거나 제거할 때는 O(1) 시간 복잡도를 가지며, 배열의 크기가 초과될 때만 배열을 재할당하는 과정이 발생한다. 또한 index로 접근이 가능하기 때문에 요소에 접근할 때도 O(1) 시간 복잡도를 가진다.
+
+<pre>
+LinkedList: 이중 연결 리스트 구조로 인해 추가적인 메모리 소비와 상대적으로 낮은 캐시 효율성.
+ArrayDeque: 배열 기반으로 더 나은 캐시 성능과 연산 속도.
+</pre>
 
 <br/>
 
@@ -707,4 +730,21 @@ public abstract class AbstractQueue<E>
 ### PriorityQueue
 PriorityQueue는 내부적으로 동적배열 역할을 하는 queue 멤버필드와 siftUp(int k, E x), siftDown(int k, E x) 메서드를 구현하여 heap 자료구조를 지원하는 클래스이다. 
 또한, 요소들간 비교를 위해 comparator 멤버필드를 가지며 comparator가 초기화되지 않은 경우, 비교 대상이 되는 Element는 Comparlabe을 구현하여야한다.
+```java
+/**
+* Priority queue represented as a balanced binary heap: the two
+* children of queue[n] are queue[2*n+1] and queue[2*(n+1)].  The
+* priority queue is ordered by comparator, or by the elements'
+* natural ordering, if comparator is null: For each node n in the
+* heap and each descendant d of n, n <= d.  The element with the
+* lowest value is in queue[0], assuming the queue is nonempty.
+*/
+transient Object[] queue; // non-private to simplify nested class access
 
+/**
+* The comparator, or null if priority queue uses elements'
+* natural ordering.
+*/
+@SuppressWarnings("serial") // Conditionally serializable
+private final Comparator<? super E> comparator;
+```
