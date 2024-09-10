@@ -352,7 +352,7 @@ List는 순서가 있는 데이터의 집합을 다룰 때 사용된다. index�
 ```java
 public interface List<E> extends Collection<E> {
     // Query Operations
-.
+
                                         .
                                         .
                                         .
@@ -382,7 +382,6 @@ public interface List<E> extends Collection<E> {
     }
 
     // sort 함수를 보면 Arrays.sort()를 사용 후, iterator를 다시 설정해주고있다.
-    // 여기서 다시 알 수 있는 게 collection의 실체는 iterator이다.
     @SuppressWarnings({"unchecked", "rawtypes"})
     default void sort(Comparator<? super E> c) {
         Object[] a = this.toArray();
@@ -572,6 +571,114 @@ public class Stack<E> extends Vector<E> {
 ```
 
 <br/>
+
+### AbstractSequentialList
+AbstractSequentialList는 AbstractList의 하위 클래스이며, ListIterator를 사용한 메서드 구현으로 순차적으로 접근할 수 있는 저장소(또한, 순서도 보장)를 쉽게 구현할 수 있도록 돕는다. (특이한 점은 LinkedList는 해당 메서드들을 오버라이딩하여 사용하고 있다.)
+```java
+public abstract class AbstractSequentialList<E> extends AbstractList<E> {
+    protected AbstractSequentialList() {
+    }
+
+    public E get(int index) {
+        try {
+            return listIterator(index).next();
+        } catch (NoSuchElementException exc) {
+            throw new IndexOutOfBoundsException("Index: "+index);
+        }
+    }
+
+    public E set(int index, E element) {
+        try {
+            ListIterator<E> e = listIterator(index);
+            E oldVal = e.next();
+            e.set(element);
+            return oldVal;
+        } catch (NoSuchElementException exc) {
+            throw new IndexOutOfBoundsException("Index: "+index);
+        }
+    }
+
+    public void add(int index, E element) {
+        try {
+            listIterator(index).add(element);
+        } catch (NoSuchElementException exc) {
+            throw new IndexOutOfBoundsException("Index: "+index);
+        }
+    }
+
+    public E remove(int index) {
+        try {
+            ListIterator<E> e = listIterator(index);
+            E outCast = e.next();
+            e.remove();
+            return outCast;
+        } catch (NoSuchElementException exc) {
+            throw new IndexOutOfBoundsException("Index: "+index);
+        }
+    }
+
+
+    // Bulk Operations
+
+    public boolean addAll(int index, Collection<? extends E> c) {
+        try {
+            boolean modified = false;
+            ListIterator<E> e1 = listIterator(index);
+            for (E e : c) {
+                e1.add(e);
+                modified = true;
+            }
+            return modified;
+        } catch (NoSuchElementException exc) {
+            throw new IndexOutOfBoundsException("Index: "+index);
+        }
+    }
+
+
+    // Iterators
+
+    public Iterator<E> iterator() {
+        return listIterator();
+    }
+
+    public abstract ListIterator<E> listIterator(int index);
+}
+```
+
+<br/>
+
+### LinkedList
+LinkedList는 AbstractSequentialList를 상속하고 Deque를 구현한다. 따라서 양방향에서 큐연산이 가능하며, 데이터의 순차접근이 가능하다.
+데이터는 Node<E> 클래스를 사용하여 저장하며, 멤버필드로 first node와 last node를 가진다. 즉, 연결리스트로써 처음과 마지막에 삽입과 삭제 시에는 O(1)의 시간 복잡도를 가지지만 특정 노드를 찾으로면 노드 하나하나를 순차 접근하여야하므로 O(n) 시간 복잡도를 가지게 된다. 
+```java
+/**
+* Pointer to first node.
+*/
+transient Node<E> first;
+
+/**
+* Pointer to last node.
+*/
+transient Node<E> last;
+
+                                        .
+                                        .
+                                        .
+
+private static class Node<E> {
+        E item;
+        Node<E> next;
+        Node<E> prev;
+
+        Node(Node<E> prev, E element, Node<E> next) {
+            this.item = element;
+            this.next = next;
+            this.prev = prev;
+        }
+    }
+```
+
+<br/>
 <br/>
 
 ## Queue
@@ -748,3 +855,4 @@ transient Object[] queue; // non-private to simplify nested class access
 @SuppressWarnings("serial") // Conditionally serializable
 private final Comparator<? super E> comparator;
 ```
+
