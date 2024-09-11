@@ -114,6 +114,14 @@ public class HashSet<E> extends AbstractSet<E> implements Set<E>, Cloneable, jav
                                         .
                                         .
 
+    public Iterator<E> iterator() {
+        return map.keySet().iterator();
+    }
+
+                                        .
+                                        .
+                                        .
+
 }
 ```
 
