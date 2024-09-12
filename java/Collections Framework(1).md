@@ -348,7 +348,7 @@ public abstract class AbstractCollection<E> implements Collection<E> {
 ## List
 List는 순서가 있는 데이터의 집합을 다룰 때 사용된다. index를 제공하므로 index를 인자로하는 메서드 및 ListIterator를 제공한다. <br/>
 ? 여기서 드는 생각이 Collection 인터페이스에서는 iterator()를 정의하는 Iterable을 상속하고 있는데 원래도 순서를 제공하는것이 아닌가
-  => Iterator는 순서와 무관하다. iterator()로 컬렉션에 저장된 요소들을 하나씩 방문할 수는 있지만, 요소들이 삽입된 순서를 보장하거나 유지하지는 않는다.
+  => Iterator는 단순히 인터페이스이다. iterator()를 구현하는 것은 구현체들의 몫이며 하위 클래스에서 어떤 방식으로 구현하는지에 따라 순서를 보장할 수도 보장하지 않을수도 있다.
 ```java
 public interface List<E> extends Collection<E> {
     // Query Operations
