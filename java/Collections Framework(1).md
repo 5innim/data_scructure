@@ -486,7 +486,7 @@ public interface List<E> extends Collection<E> {
 
 ### AbstractList
 AbstractList는 List 인터페이스를 부분적으로 구현하여 리스트의 기본 동작을 제공. List 인터페이스를 구현하는 서브클래스들의 반복적인 코드 작성을 피하게 한다. 
-=> 클래스 내부를 확인하였을때 매개변수로 받은 index를 직접적으로 사용하는 add, remove 등의 멤버 메서드들은 구현하지 않았다. 
+=> 클래스 내부를 확인하였을때 매개변수로 받은 index를 직접적으로 사용하는 get 멤버 메서드들은 구현하지 않았다. set/add/remove 또한 예외를 발생하도록만 구현되어있다. 대신 나머지 메서드들이 get/set/add/remove를 사용하여 동작하는 것으로 구현되어있다. 
 
 <br/>
 
@@ -520,7 +520,7 @@ Vector는 ArrayList와 마찬가지로 동적 배열을 제공하는 클래스�
 <br/>
 
 ### Stack
-Stack은 Vector 클래스를 상속하면서 stack 자료구조의 기본연산인 push, pop, peek을 구현한다. 구현한 연산들은 부모 클래스인 Vector 클래스의 함수를 사용하게 되므로, 멀티스레드 환경에서 동기화를 제공한다.
+Stack은 Vector 클래스를 상속하면서 stack 자료구조의 기본연산인 push/pop/peek을 구현한다. 구현한 연산들은 부모 클래스인 Vector 클래스의 함수를 사용하게 되므로, 멀티스레드 환경에서 동기화를 제공한다.
 
 ```java
 public class Stack<E> extends Vector<E> {
@@ -573,7 +573,7 @@ public class Stack<E> extends Vector<E> {
 <br/>
 
 ### AbstractSequentialList
-AbstractSequentialList는 AbstractList의 하위 클래스이며, ListIterator를 사용한 메서드 구현으로 순차적으로 접근할 수 있는 저장소(또한, 순서도 보장)를 쉽게 구현할 수 있도록 돕는다. (특이한 점은 LinkedList는 해당 메서드들을 오버라이딩하여 사용하고 있다.)
+AbstractSequentialList는 AbstractList의 하위 클래스이며, get/set/add/remove 메서드를 listIterator를 사용하여 구현함으로써 순차적인 접근으로 각 연산을 제공한다.(특이한 점은 LinkedList는 해당 메서드들을 오버라이딩하여 사용하고 있다.)
 ```java
 public abstract class AbstractSequentialList<E> extends AbstractList<E> {
     protected AbstractSequentialList() {
@@ -771,7 +771,7 @@ ArrayDeque: 동기화가 없기 때문에 빠른 연산 가능.
 
 **2. LinkedList와의 비교**
 - LinkedList는 이중 연결 리스트(doubly linked list)로 구현되어 있다. 이 때문에 요소를 큐의 앞이나 뒤에 삽입하거나 제거하는 연산은 O(1) 시간 복잡도를 갖지만, 메모리 관점에서 비효율적일 수 있다. 각각의 요소는 데이터와 함께 포인터를 포함해야 하므로 추가적인 메모리 사용이 필요하며, 연결 리스트에서 요소에 접근할 때는 노드를 순차적으로 따라가야 O(n) 시간 복잡도를 가진다.
-- ArrayDeque는 내부적으로 배열을 사용하, 배열은 메모리 상에 연속적으로 저장되므로 캐시 적중률(cache hit rate)이 높다. 요소를 배열의 앞뒤에 삽입하거나 제거할 때는 O(1) 시간 복잡도를 가지며, 배열의 크기가 초과될 때만 배열을 재할당하는 과정이 발생한다. 또한 index로 접근이 가능하기 때문에 요소에 접근할 때도 O(1) 시간 복잡도를 가진다.
+- ArrayDeque는 내부적으로 배열을 사용하고, 배열은 메모리 상에 연속적으로 저장되므로 캐시 적중률(cache hit rate)이 높다. 요소를 배열의 앞뒤에 삽입하거나 제거할 때는 O(1) 시간 복잡도를 가지며, 배열의 크기가 초과될 때만 배열을 재할당하는 과정이 발생한다. 또한 index로 접근이 가능하기 때문에 요소에 접근할 때도 O(1) 시간 복잡도를 가진다.
 
 <pre>
 LinkedList: 이중 연결 리스트 구조로 인해 추가적인 메모리 소비와 상대적으로 낮은 캐시 효율성.
