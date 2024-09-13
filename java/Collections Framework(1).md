@@ -780,6 +780,29 @@ ArrayDeque: 배열 기반으로 더 나은 캐시 성능과 연산 속도.
 
 <br/>
 
+ArrayDeque는 내부적으로 head, tail 필드를 사용해 순환큐를 구현한다
+```java
+    transient Object[] elements;
+
+    /**
+     * The index of the element at the head of the deque (which is the
+     * element that would be removed by remove() or pop()); or an
+     * arbitrary number 0 <= head < elements.length equal to tail if
+     * the deque is empty.
+     */
+    transient int head;
+
+    /**
+     * The index at which the next element would be added to the tail
+     * of the deque (via addLast(E), add(E), or push(E));
+     * elements[tail] is always null.
+     */
+    transient int tail;
+
+```
+
+<br/>
+
 ### AbstractQueue
 AbstractQueue는 Queue 인터페이스의 일부 메서드를 구현한다. add(E e), remove(), element() 메서드 내에서 각각 offer(E e), poll(), peek() 메서드를 사용하며 반환값에 따라 예외를 발생시키는 것을 볼 수 있다. 
 ```java
