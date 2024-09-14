@@ -763,24 +763,24 @@ ArrayDeque는 동적배열을 사용하여 Deque를 구현하는 클래스이다
 - Stack 클래스는 **동기화(synchronization)**가 포함된 자료 구조다. 반면, ArrayDeque는 동기화를 지원하지 않으므로 스택처럼 사용할 때 동기화에 따른 성능 저하가 발생하지 않아 더 빠르게 동작할 수 있다.
 
 <pre>
-Stack: 동기화로 인해 성능이 느려질 수 있음.
-ArrayDeque: 동기화가 없기 때문에 빠른 연산 가능.
+Stack: 동기화로 인해 성능이 느려질 수 있음. (index 접근이 가능. O(1))
+ArrayDeque: 동기화가 없기 때문에 빠른 연산 가능. (index 접근이 불가능.)
 </pre>
 
 <br/>
 
 **2. LinkedList와의 비교**
 - LinkedList는 이중 연결 리스트(doubly linked list)로 구현되어 있다. 이 때문에 요소를 큐의 앞이나 뒤에 삽입하거나 제거하는 연산은 O(1) 시간 복잡도를 갖지만, 메모리 관점에서 비효율적일 수 있다. 각각의 요소는 데이터와 함께 포인터를 포함해야 하므로 추가적인 메모리 사용이 필요하며, 연결 리스트에서 요소에 접근할 때는 노드를 순차적으로 따라가야 O(n) 시간 복잡도를 가진다.
-- ArrayDeque는 내부적으로 배열을 사용하고, 배열은 메모리 상에 연속적으로 저장되므로 캐시 적중률(cache hit rate)이 높다. 요소를 배열의 앞뒤에 삽입하거나 제거할 때는 O(1) 시간 복잡도를 가지며, 배열의 크기가 초과될 때만 배열을 재할당하는 과정이 발생한다. 또한 index로 접근이 가능하기 때문에 요소에 접근할 때도 O(1) 시간 복잡도를 가진다.
+- ArrayDeque는 내부적으로 배열을 사용하고, 배열은 메모리 상에 연속적으로 저장되므로 캐시 적중률(cache hit rate)이 높다. 요소를 순환큐의 head/tail에 추가하거나 제거할 때는 O(1) 시간 복잡도를 가지며, 배열의 크기가 초과될 때만 배열을 재할당하는 과정이 발생한다.
 
 <pre>
-LinkedList: 이중 연결 리스트 구조로 인해 추가적인 메모리 소비와 상대적으로 낮은 캐시 효율성.
-ArrayDeque: 배열 기반으로 더 나은 캐시 성능과 연산 속도.
+LinkedList: 이중 연결 리스트 구조로 인해 추가적인 메모리 소비와 상대적으로 낮은 캐시 효율성. (get/set 메서드 구현. O(n))
+ArrayDeque: 배열 기반으로 더 나은 캐시 성능과 연산 속도. (index 접근 불가능.)
 </pre>
 
 <br/>
 
-ArrayDeque는 내부적으로 head, tail 필드를 사용해 순환큐를 구현한다
+ArrayDeque는 내부적으로 head, tail 필드를 사용해 순환큐를 구현한다. 순환큐이기 때문에 배열을 사용하여 구현한다고 하더라도 index를 사용한 접근이 불가능하다. 따라서, get/set과 같은 메서드는 구현하지 않고 있으며, 오로지 head와 tail 위치에 요소를 추가하거나 삭제하는 offerFirst/offerLast, pollFirst/pollLast 또는 peekFirst/peekLast 등의 함수만 제공한다.
 ```java
     transient Object[] elements;
 
